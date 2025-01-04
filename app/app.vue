@@ -16,8 +16,6 @@ type Photo = {
 };
 
 const todoList = ref<Todo[]>([]);
-const photoList = ref<Photo[]>([]);
-
 const numTodoItems = computed(() => {
   return todoList.value.length;
 });
@@ -27,6 +25,14 @@ const numCompletedTodos = computed(() => {
 const percentageCompletedTodos = computed(() => {
   return Math.round((numCompletedTodos.value / numTodoItems.value) * 100);
 });
+
+function fetchTodoList() {
+  fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
+    todoList.value = await response.json();
+  });
+}
+
+const photoList = ref<Photo[]>([]);
 const numPhotos = computed(() => {
   return photoList.value.length;
 });
@@ -39,11 +45,7 @@ const numEvenAlbums = computed(() => {
 const percentageEvenAlbums = computed(() => {
   return Math.round((numEvenAlbums.value / numPhotos.value) * 100);
 });
-function fetchTodoList() {
-  fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
-    todoList.value = await response.json();
-  });
-}
+
 function fetchPhotoList() {
   fetch('https://jsonplaceholder.typicode.com/photos/').then(async (response) => {
     photoList.value = await response.json();
