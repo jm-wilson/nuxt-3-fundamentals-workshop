@@ -1,6 +1,12 @@
 <template>
   <div>
     <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+    Hello Nuxt
   </div>
 </template>
+
+<style>
+:root {
+  color-scheme: light dark;
+}
+</style>
