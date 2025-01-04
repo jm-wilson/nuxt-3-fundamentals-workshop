@@ -1,5 +1,4 @@
-<script lang="ts">
-import { defineNuxtComponent } from '#app';
+<script setup lang="ts">
 
 type Todo = {
   userId: number;
@@ -16,47 +15,40 @@ type Photo = {
   thumbnailUrl: string;
 };
 
-export default defineNuxtComponent({
-  data: () => ({
-    todoList: [] as Todo[],
-    photoList: [] as Photo[],
-  }),
-  computed: {
-    numTodoItems() {
-      return this.todoList.length;
-    },
-    numCompletedTodos() {
-      return this.todoList.filter((todo) => todo.completed).length;
-    },
-    percentageCompletedTodos() {
-      return Math.round((this.numCompletedTodos / this.numTodoItems) * 100);
-    },
-    numPhotos() {
-      return this.photoList.length;
-    },
-    numOddAlbums() {
-      return this.photoList.filter((photo) => photo.albumId % 2 !== 0).length;
-    },
-    numEvenAlbums() {
-      return this.photoList.filter((photo) => photo.albumId % 2 === 0).length;
-    },
-    percentageEvenAlbums() {
-      return Math.round((this.numEvenAlbums / this.numPhotos) * 100);
-    },
-  },
-  methods: {
-    fetchTodoList() {
-      fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
-        this.todoList = await response.json();
-      });
-    },
-    fetchPhotoList() {
-      fetch('https://jsonplaceholder.typicode.com/photos/').then(async (response) => {
-        this.photoList = await response.json();
-      });
-    },
-  },
+const todoList = ref<Todo[]>([]);
+const photoList = ref<Photo[]>([]);
+
+const numTodoItems = computed(() => {
+  return todoList.value.length;
 });
+const numCompletedTodos = computed(() => {
+  return todoList.value.filter((todo) => todo.completed).length;
+});
+const percentageCompletedTodos = computed(() => {
+  return Math.round((numCompletedTodos.value / numTodoItems.value) * 100);
+});
+const numPhotos = computed(() => {
+  return photoList.value.length;
+});
+const numOddAlbums = computed(() => {
+  return photoList.value.filter((photo) => photo.albumId % 2 !== 0).length;
+});
+const numEvenAlbums = computed(() => {
+  return photoList.value.filter((photo) => photo.albumId % 2 === 0).length;
+});
+const percentageEvenAlbums = computed(() => {
+  return Math.round((numEvenAlbums.value / numPhotos.value) * 100);
+});
+function fetchTodoList() {
+  fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
+    todoList.value = await response.json();
+  });
+}
+function fetchPhotoList() {
+  fetch('https://jsonplaceholder.typicode.com/photos/').then(async (response) => {
+    photoList.value = await response.json();
+  });
+}
 </script>
 
 <template>
