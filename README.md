@@ -7,6 +7,7 @@
 
 *Content below this line was preserved from the original README.*
 <hr>
+
 # Nuxt 3 Fundamentals Course with Frontend Masters
 
 Watch the full course on the [Frontend Masters website](https://frontendmasters.com/courses/nuxt).
