@@ -106,10 +106,12 @@ function fetchPhotoList() {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 /* The course says to use @import, but that's deprecated in favor of @use now */
 @use './assets/styles/main.scss';
+</style>
 
+<style scoped>
 .todos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
