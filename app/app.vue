@@ -106,19 +106,9 @@ function fetchPhotoList() {
   </div>
 </template>
 
-<style>
-:root {
-  color-scheme: light dark;
-}
-</style>
-
-<style scoped>
-summary {
-  border: 1px solid #333;
-  padding: 0.5em;
-  margin: 0.5em;
-  display: inline-block;
-}
+<style scoped lang="scss">
+/* The course says to use @import, but that's deprecated in favor of @use now */
+@use './assets/styles/main.scss';
 
 .todos {
   display: grid;
@@ -132,6 +122,6 @@ summary {
 }
 
 :is(.todos, .photos) li {
-    list-style: none;
+  list-style: none;
 }
 </style>
