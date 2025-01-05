@@ -53,56 +53,63 @@ function fetchPhotoList() {
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <NuxtRouteAnnouncer />
-    <img src="/todo.jpg" alt="An empty notebook on a desk" />
-    <p>
-      Photo by
-      <a
-        href="https://unsplash.com/@jeshoots?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
-        >JESHOOTS.COM</a
-      >
-      on
-      <a
-        href="https://unsplash.com/photos/an-open-empty-notebook-on-a-white-desk-next-to-an-iphone-and-a-macbook-pUAM5hPaCRI?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
-        >Unsplash</a
-      >
-    </p>
-    <h1>Hello Nuxt</h1>
-    <details>
-      <summary>TODOS</summary>
-      <button @click="fetchTodoList">Fetch Todos</button>
+    <div class="section columns">
+      <img class="column" src="/todo.jpg" alt="An empty notebook on a desk" />
+      <p class="column">
+        Photo by
+        <a
+          href="https://unsplash.com/@jeshoots?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+          >JESHOOTS.COM</a
+        >
+        on
+        <a
+          href="https://unsplash.com/photos/an-open-empty-notebook-on-a-white-desk-next-to-an-iphone-and-a-macbook-pUAM5hPaCRI?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+          >Unsplash</a
+        >
+      </p>
+    </div>
+    <h1 class="is-size-1">Hello Nuxt</h1>
+    <div class="section">
       <details>
-        <summary>All todos</summary>
-        <pre>{{ todoList }}</pre>
+        <summary>TODOS</summary>
+        <button @click="fetchTodoList">Fetch Todos</button>
+        <details>
+          <summary>All todos</summary>
+          <pre>{{ todoList }}</pre>
+        </details>
+
+        <p v-if="numCompletedTodos">
+          {{ numCompletedTodos }} / {{ numTodoItems }} todos completed ({{
+            percentageCompletedTodos
+          }}%)
+        </p>
+        <ul class="grid is-col-min-14">
+          <li class="list-none" v-for="todo in todoList.slice(0, 20)" :key="todo.id">
+            <input disabled type="checkbox" :checked="todo.completed" /> {{ todo.title }}
+          </li>
+        </ul>
       </details>
-
-      <p v-if="numCompletedTodos">
-        {{ numCompletedTodos }} / {{ numTodoItems }} todos completed ({{
-          percentageCompletedTodos
-        }}%)
-      </p>
-      <ul class="todos">
-        <li v-for="todo in todoList.slice(0, 20)" :key="todo.id">
-          <input disabled type="checkbox" :checked="todo.completed" /> {{ todo.title }}
-        </li>
-      </ul>
-    </details>
-
-    <details>
-      <summary>PHOTOS</summary>
-      <button @click="fetchPhotoList">Fetch photos</button>
-      <p v-if="numPhotos">
-        {{ numPhotos }} photos total ({{ numOddAlbums }} odd, {{ numEvenAlbums }} even ({{
-          percentageEvenAlbums
-        }}%))
-      </p>
-      <ul class="photos">
-        <li v-for="photo in photoList.slice(0, 10)" :key="photo.id">
-          <img :src="photo.thumbnailUrl" :alt="photo.title" />
-        </li>
-      </ul>
-    </details>
+    </div>
+    <div class="section">
+      <details>
+        <summary>PHOTOS</summary>
+        <button @click="fetchPhotoList">Fetch photos</button>
+        <p v-if="numPhotos">
+          {{ numPhotos }} photos total ({{ numOddAlbums }} odd, {{ numEvenAlbums }} even ({{
+            percentageEvenAlbums
+          }}%))
+        </p>
+        <div class="fixed-grid has-5-cols">
+          <ul class="grid">
+            <li class="list-none" v-for="photo in photoList.slice(0, 10)" :key="photo.id">
+              <img :src="photo.thumbnailUrl" :alt="photo.title" />
+            </li>
+          </ul>
+        </div>
+      </details>
+    </div>
   </div>
 </template>
 
@@ -112,18 +119,11 @@ function fetchPhotoList() {
 </style>
 
 <style scoped>
-.todos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1em;
+.list-none {
+  list-style-type: none;
 }
 
-.photos {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-}
-
-:is(.todos, .photos) li {
-  list-style: none;
+.mw-300 {
+  min-width: 300px;
 }
 </style>
