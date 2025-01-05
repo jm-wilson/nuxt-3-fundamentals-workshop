@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 type Todo = {
   userId: number;
   id: number;
@@ -83,8 +82,8 @@ function fetchPhotoList() {
           percentageCompletedTodos
         }}%)
       </p>
-      <ul>
-        <li v-for="todo in todoList" :key="todo.id">
+      <ul class="todos">
+        <li v-for="todo in todoList.slice(0, 20)" :key="todo.id">
           <input disabled type="checkbox" :checked="todo.completed" /> {{ todo.title }}
         </li>
       </ul>
@@ -121,12 +120,18 @@ summary {
   display: inline-block;
 }
 
+.todos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1em;
+}
+
 .photos {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+}
 
-  li {
+:is(.todos, .photos) li {
     list-style: none;
-  }
 }
 </style>
