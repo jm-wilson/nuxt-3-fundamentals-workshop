@@ -1,0 +1,19 @@
+@use '../../node_modules/bulma/css/bulma.min.css';
+
+$headerColor: rebeccapurple;
+$borderColor: #333;
+
+:root {
+  color-scheme: light dark;
+}
+
+h1 {
+  color: #{$headerColor};
+}
+
+summary {
+  border: 1px solid #{$borderColor};
+  padding: 0.5em;
+  margin: 0.5em;
+  display: inline-block;
+}
