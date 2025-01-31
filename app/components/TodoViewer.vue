@@ -18,11 +18,9 @@ const percentageCompletedTodos = computed(() => {
 });
 
 function fetchTodoList() {
-  fetch("https://jsonplaceholder.typicode.com/todos/").then(
-    async (response) => {
-      todoList.value = await response.json();
-    }
-  );
+  fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
+    todoList.value = await response.json();
+  });
 }
 </script>
 
@@ -35,17 +33,22 @@ function fetchTodoList() {
       <pre>{{ todoList }}</pre>
     </details>
 
-    <p v-if="numCompletedTodos">
-      {{ numCompletedTodos }} / {{ numTodoItems }} todos completed ({{
-        percentageCompletedTodos
-      }}%)
-    </p>
+    <slot
+      name="header"
+      v-if="numCompletedTodos"
+      :completed="numCompletedTodos"
+      :total="numTodoItems"
+      :percent="percentageCompletedTodos"
+    >
+      <p>
+        {{ numCompletedTodos }} / {{ numTodoItems }} todos completed ({{
+          percentageCompletedTodos
+        }}%)
+      </p>
+    </slot>
+
     <ul class="grid is-col-min-14">
-      <li
-        class="list-none"
-        v-for="todo in todoList.slice(0, 20)"
-        :key="todo.id"
-      >
+      <li class="list-none" v-for="todo in todoList.slice(0, 20)" :key="todo.id">
         <input disabled type="checkbox" :checked="todo.completed" />
         {{ todo.title }}
       </li>

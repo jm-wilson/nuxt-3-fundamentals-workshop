@@ -20,7 +20,9 @@
     </div>
     <h1 class="is-size-1">Hello Nuxt</h1>
     <div class="section">
-      <TodoViewer />
+      <TodoViewer>
+        <template #header="{ completed, total, percent }"> {{ completed }} / {{ total }} </template>
+      </TodoViewer>
     </div>
     <div class="section">
       <PhotoGallery />
