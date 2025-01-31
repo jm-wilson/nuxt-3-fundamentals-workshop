@@ -122,8 +122,4 @@ function fetchPhotoList() {
 .list-none {
   list-style-type: none;
 }
-
-.mw-300 {
-  min-width: 300px;
-}
 </style>
