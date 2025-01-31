@@ -1,11 +1,4 @@
 <script setup lang="ts">
-type Todo = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
-
 type Photo = {
   albumId: number;
   id: number;
@@ -13,23 +6,6 @@ type Photo = {
   url: string;
   thumbnailUrl: string;
 };
-
-const todoList = ref<Todo[]>([]);
-const numTodoItems = computed(() => {
-  return todoList.value.length;
-});
-const numCompletedTodos = computed(() => {
-  return todoList.value.filter((todo) => todo.completed).length;
-});
-const percentageCompletedTodos = computed(() => {
-  return Math.round((numCompletedTodos.value / numTodoItems.value) * 100);
-});
-
-function fetchTodoList() {
-  fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
-    todoList.value = await response.json();
-  });
-}
 
 const photoList = ref<Photo[]>([]);
 const numPhotos = computed(() => {
@@ -72,25 +48,7 @@ function fetchPhotoList() {
     </div>
     <h1 class="is-size-1">Hello Nuxt</h1>
     <div class="section">
-      <details>
-        <summary>TODOS</summary>
-        <button @click="fetchTodoList">Fetch Todos</button>
-        <details>
-          <summary>All todos</summary>
-          <pre>{{ todoList }}</pre>
-        </details>
-
-        <p v-if="numCompletedTodos">
-          {{ numCompletedTodos }} / {{ numTodoItems }} todos completed ({{
-            percentageCompletedTodos
-          }}%)
-        </p>
-        <ul class="grid is-col-min-14">
-          <li class="list-none" v-for="todo in todoList.slice(0, 20)" :key="todo.id">
-            <input disabled type="checkbox" :checked="todo.completed" /> {{ todo.title }}
-          </li>
-        </ul>
-      </details>
+      <TodoViewer />
     </div>
     <div class="section">
       <details>
@@ -118,7 +76,7 @@ function fetchPhotoList() {
 @use './assets/styles/main.scss';
 </style>
 
-<style scoped>
+<style>
 .list-none {
   list-style-type: none;
 }
