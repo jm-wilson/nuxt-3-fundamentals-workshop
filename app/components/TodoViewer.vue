@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { Metrics } from './BaseGallery.vue';
+
 type Todo = {
   userId: number;
   id: number;
@@ -6,52 +8,28 @@ type Todo = {
   completed: boolean;
 };
 
-const todoList = ref<Todo[]>([]);
-const numTodoItems = computed(() => {
-  return todoList.value.length;
-});
-const numCompletedTodos = computed(() => {
-  return todoList.value.filter((todo) => todo.completed).length;
-});
-const percentageCompletedTodos = computed(() => {
-  return Math.round((numCompletedTodos.value / numTodoItems.value) * 100);
-});
-
-function fetchTodoList() {
-  fetch('https://jsonplaceholder.typicode.com/todos/').then(async (response) => {
-    todoList.value = await response.json();
-  });
-}
+// `as const` allows keys to be inferred as literals instead of `string`
+// `satisfies` gives type checking/inference within this object
+const metrics = {
+  completed: (todo) => todo.completed,
+} as const satisfies Metrics<Todo>;
 </script>
 
 <template>
-  <details>
-    <summary>TODOS</summary>
-    <button @click="fetchTodoList">Fetch Todos</button>
-    <details>
-      <summary>All todos</summary>
-      <pre>{{ todoList }}</pre>
-    </details>
+  <BaseGallery
+    :metrics="metrics"
+    fetch-button-text="Get TODOs"
+    fetch-url="https://jsonplaceholder.typicode.com/todos/"
+  >
+    <template #summary> Show TODOs </template>
 
-    <slot
-      name="header"
-      v-if="numCompletedTodos"
-      :completed="numCompletedTodos"
-      :total="numTodoItems"
-      :percent="percentageCompletedTodos"
-    >
-      <p>
-        {{ numCompletedTodos }} / {{ numTodoItems }} todos completed ({{
-          percentageCompletedTodos
-        }}%)
-      </p>
-    </slot>
+    <template #header="{ metrics }">
+      <span class="is-size-4"> TODOs ({{ metrics.completed }} / {{ metrics.total }}) </span>
+    </template>
 
-    <ul class="grid is-col-min-14">
-      <li class="list-none" v-for="todo in todoList.slice(0, 20)" :key="todo.id">
-        <input disabled type="checkbox" :checked="todo.completed" />
-        {{ todo.title }}
-      </li>
-    </ul>
-  </details>
+    <template #list-item="{ item: todo }">
+      <input disabled type="checkbox" :checked="todo.completed" />
+      {{ todo.title }}
+    </template>
+  </BaseGallery>
 </template>

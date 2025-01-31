@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { Metrics } from './BaseGallery.vue';
+
 type Photo = {
   albumId: number;
   id: number;
@@ -7,42 +9,30 @@ type Photo = {
   thumbnailUrl: string;
 };
 
-const photoList = ref<Photo[]>([]);
-const numPhotos = computed(() => {
-  return photoList.value.length;
-});
-const numOddAlbums = computed(() => {
-  return photoList.value.filter((photo) => photo.albumId % 2 !== 0).length;
-});
-const numEvenAlbums = computed(() => {
-  return photoList.value.filter((photo) => photo.albumId % 2 === 0).length;
-});
-const percentageEvenAlbums = computed(() => {
-  return Math.round((numEvenAlbums.value / numPhotos.value) * 100);
-});
-
-function fetchPhotoList() {
-  fetch('https://jsonplaceholder.typicode.com/photos/').then(async (response) => {
-    photoList.value = await response.json();
-  });
-}
+// `as const` allows keys to be inferred as literals instead of `string`
+// `satisfies` gives type checking/inference within this object
+const metrics = {
+  odd: (photo) => photo.albumId % 2 !== 0,
+  even: (photo) => photo.albumId % 2 === 0,
+} as const satisfies Metrics<Photo>;
 </script>
 
 <template>
-  <details>
-    <summary>PHOTOS</summary>
-    <button @click="fetchPhotoList">Fetch photos</button>
-    <p v-if="numPhotos">
-      {{ numPhotos }} photos total ({{ numOddAlbums }} odd, {{ numEvenAlbums }} even ({{
-        percentageEvenAlbums
-      }}%))
-    </p>
-    <div class="fixed-grid has-5-cols">
-      <ul class="grid">
-        <li class="list-none" v-for="photo in photoList.slice(0, 10)" :key="photo.id">
-          <img :src="photo.thumbnailUrl" :alt="photo.title" />
-        </li>
-      </ul>
-    </div>
-  </details>
+  <BaseGallery
+    :metrics="metrics"
+    fetch-button-text="Get Photos"
+    fetch-url="https://jsonplaceholder.typicode.com/photos/"
+  >
+    <template #summary> Show Photos </template>
+
+    <template #header="{ metrics }">
+      <span class="is-size-4">
+        Photos ({{ metrics.odd }} odd / {{ metrics.even }} even = {{ metrics.total }} total)
+      </span>
+    </template>
+
+    <template #list-item="{ item: photo }">
+      <img :src="photo.thumbnailUrl" :alt="photo.title" />
+    </template>
+  </BaseGallery>
 </template>
