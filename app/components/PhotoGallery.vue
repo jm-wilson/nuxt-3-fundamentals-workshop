@@ -35,7 +35,9 @@ const metrics = {
     </template>
 
     <template #list-item="{ item: photo }">
-      <img :src="photo.thumbnailUrl" :alt="photo.title" />
+      <NuxtLink :to="`/display/photos/${photo.id}`">
+        <img :src="photo.thumbnailUrl" :alt="photo.title" />
+      </NuxtLink>
     </template>
   </BaseGallery>
 </template>
