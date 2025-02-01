@@ -6,6 +6,7 @@ type Props = {
   fetchButtonText: string;
   fetchUrl: string;
   metrics: Record<TMetricsKey, (item: TItem) => boolean>;
+  filters?: Array<(item: TItem) => boolean>;
 };
 const props = defineProps<Props>();
 
@@ -42,7 +43,13 @@ const metrics = computed(() => {
 
 onMounted(() => {
   fetch(props.fetchUrl).then(async (response) => {
-    list.value = await response.json();
+    let data: TItem[] = await response.json();
+
+    props.filters?.forEach((filter) => {
+      data = data.filter(filter);
+    });
+
+    list.value = data;
   });
 });
 </script>
