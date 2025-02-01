@@ -8,6 +8,10 @@ type Todo = {
   completed: boolean;
 };
 
+const filters = useQueryFilters<Todo>({
+  completed: (todo) => todo.completed,
+});
+
 // `as const` allows keys to be inferred as literals instead of `string`
 // `satisfies` gives type checking/inference within this object
 const metrics = {
@@ -18,6 +22,7 @@ const metrics = {
 <template>
   <BaseGallery
     :metrics="metrics"
+    :filters="filters"
     fetch-button-text="Get TODOs"
     fetch-url="https://jsonplaceholder.typicode.com/todos/"
   >

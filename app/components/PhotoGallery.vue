@@ -9,6 +9,10 @@ type Photo = {
   thumbnailUrl: string;
 };
 
+const filters = useQueryFilters<Photo>({
+  even: (photo) => photo.albumId % 2 === 0,
+});
+
 // `as const` allows keys to be inferred as literals instead of `string`
 // `satisfies` gives type checking/inference within this object
 const metrics = {
@@ -20,6 +24,7 @@ const metrics = {
 <template>
   <BaseGallery
     :metrics="metrics"
+    :filters="filters"
     fetch-button-text="Get Photos"
     fetch-url="https://jsonplaceholder.typicode.com/photos/"
   >
