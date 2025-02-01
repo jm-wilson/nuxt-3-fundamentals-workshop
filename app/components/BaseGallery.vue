@@ -10,7 +10,19 @@ type Props = {
 };
 const props = defineProps<Props>();
 
-const list = ref<TItem[]>([]);
+const { data } = useFetch<TItem[]>(props.fetchUrl);
+const list = computed(() => {
+  if (!data.value) {
+    return [];
+  }
+
+  let list = data.value;
+  props.filters?.forEach((filter) => {
+    list = list.filter(filter);
+  });
+
+  return list;
+});
 
 const metrics = computed(() => {
   const metrics = list.value.reduce(
@@ -38,19 +50,6 @@ const metrics = computed(() => {
   }
 
   return metrics;
-});
-
-
-onMounted(() => {
-  fetch(props.fetchUrl).then(async (response) => {
-    let data: TItem[] = await response.json();
-
-    props.filters?.forEach((filter) => {
-      data = data.filter(filter);
-    });
-
-    list.value = data;
-  });
 });
 </script>
 
