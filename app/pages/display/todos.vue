@@ -1,9 +1,12 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const route = useRoute();
+</script>
 
 <template>
   <div class="container">
     <div class="section">
-      <TodoGallery />
+      <NuxtPage v-if="route.params.id" />
+      <TodoGallery v-else />
     </div>
   </div>
 </template>

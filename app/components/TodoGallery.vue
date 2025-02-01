@@ -32,7 +32,7 @@ const metrics = {
 
     <template #list-item="{ item: todo }">
       <input disabled type="checkbox" :checked="todo.completed" />
-      {{ todo.title }}
+      <NuxtLink :to="`/display/todos/${todo.id}`">{{ todo.title }}</NuxtLink>
     </template>
   </BaseGallery>
 </template>
