@@ -11,8 +11,8 @@ const props = defineProps<Props>();
 
 const list = ref<TItem[]>([]);
 
-const metrics = computed(() =>
-  list.value.reduce(
+const metrics = computed(() => {
+  const metrics = list.value.reduce(
     (tracker, item) => {
       for (const key in props.metrics) {
         const success = props.metrics[key](item as TItem);
@@ -27,8 +27,18 @@ const metrics = computed(() =>
       return tracker;
     },
     { total: list.value.length } as Record<TMetricsKey | 'total', number>
-  )
-);
+  );
+
+  // Add zeroes for any empty metrics
+  for (const key in props.metrics) {
+    if (!metrics[key]) {
+      metrics[key] = 0;
+    }
+  }
+
+  return metrics;
+});
+
 
 function fetchList() {
   fetch(props.fetchUrl).then(async (response) => {
