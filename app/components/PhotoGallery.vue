@@ -23,8 +23,6 @@ const metrics = {
     fetch-button-text="Get Photos"
     fetch-url="https://jsonplaceholder.typicode.com/photos/"
   >
-    <template #summary> Show Photos </template>
-
     <template #header="{ metrics }">
       <span class="is-size-4">
         Photos ({{ metrics.odd }} odd / {{ metrics.even }} even = {{ metrics.total }} total)
