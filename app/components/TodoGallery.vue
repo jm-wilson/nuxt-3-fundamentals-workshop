@@ -21,8 +21,6 @@ const metrics = {
     fetch-button-text="Get TODOs"
     fetch-url="https://jsonplaceholder.typicode.com/todos/"
   >
-    <template #summary> Show TODOs </template>
-
     <template #header="{ metrics }">
       <span class="is-size-4"> TODOs ({{ metrics.completed }} / {{ metrics.total }}) </span>
     </template>
