@@ -40,15 +40,14 @@ const metrics = computed(() => {
 });
 
 
-function fetchList() {
+onMounted(() => {
   fetch(props.fetchUrl).then(async (response) => {
     list.value = await response.json();
   });
-}
+});
 </script>
 
 <template>
-  <button @click="fetchList" class="button m-2">{{ fetchButtonText }}</button>
   <details>
     <summary class="button">Show all data</summary>
     <pre>{{ list }}</pre>
