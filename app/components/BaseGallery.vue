@@ -6,13 +6,14 @@ type Props = {
   fetchButtonText: string;
   fetchUrl: string;
   metrics: Record<TMetricsKey, (item: TItem) => boolean>;
+  filters?: Array<(item: TItem) => boolean>;
 };
 const props = defineProps<Props>();
 
 const list = ref<TItem[]>([]);
 
-const metrics = computed(() =>
-  list.value.reduce(
+const metrics = computed(() => {
+  const metrics = list.value.reduce(
     (tracker, item) => {
       for (const key in props.metrics) {
         const success = props.metrics[key](item as TItem);
@@ -27,18 +28,33 @@ const metrics = computed(() =>
       return tracker;
     },
     { total: list.value.length } as Record<TMetricsKey | 'total', number>
-  )
-);
+  );
 
-function fetchList() {
+  // Add zeroes for any empty metrics
+  for (const key in props.metrics) {
+    if (!metrics[key]) {
+      metrics[key] = 0;
+    }
+  }
+
+  return metrics;
+});
+
+
+onMounted(() => {
   fetch(props.fetchUrl).then(async (response) => {
-    list.value = await response.json();
+    let data: TItem[] = await response.json();
+
+    props.filters?.forEach((filter) => {
+      data = data.filter(filter);
+    });
+
+    list.value = data;
   });
-}
+});
 </script>
 
 <template>
-  <button @click="fetchList" class="button m-2">{{ fetchButtonText }}</button>
   <details>
     <summary class="button">Show all data</summary>
     <pre>{{ list }}</pre>
